@@ -15,11 +15,11 @@ RUN set -x \
     && apt-key add Release.key \
     && apt-add-repository https://dl.winehq.org/wine-builds/ubuntu/ \
     && apt-get update -qy \
-    && apt-get install -qfy --install-recommends winehq-stable winetricks \
+    && apt-get install -qfy --no-install-recommends winehq-devel winetricks \
     && apt-get clean
 
 # wine settings
-ENV WINEARCH win64
+ENV WINEARCH win32
 ENV WINEDEBUG fixme-all
 ENV WINEPREFIX /wine
 
@@ -30,10 +30,11 @@ ENV PYPI_INDEX_URL=https://pypi.python.org/simple
 
 # install python in wine, using the msi packages to install, extracting
 # the files directly, since installing isn't running correctly.
+# 
 RUN set -x \
     && winetricks win7 \
-    && for msifile in `echo core dev exe lib pip tcltk tools`; do \
-        wget -nv "https://www.python.org/ftp/python/$PYTHON_VERSION/amd64/${msifile}.msi"; \
+    && for msifile in `echo core dev exe launcher lib pip path tcltk tools`; do \
+        wget -nv "https://www.python.org/ftp/python/$PYTHON_VERSION/win32/${msifile}.msi"; \
         wine msiexec /a "${msifile}.msi" /qb TARGETDIR=C:/Python35; \
         rm ${msifile}.msi; \
     done \
@@ -51,9 +52,10 @@ RUN set -x \
 
 # install pyinstaller
 RUN set -x \ 
-    && wget https://pypi.python.org/packages/fd/82/c8a224a9fed3af696463a7af196a891b7652445e914dc3b85f95d6417d4a/pypiwin32-219-cp35-none-win_amd64.whl#md5=0e1058e35636d2d44b4fd9a4e6abbc27 \
-    && /usr/bin/pip install pypiwin32-219-cp35-none-win_amd64.whl \
     && /usr/bin/pip install pyinstaller==$PYINSTALLER_VERSION 
+#    && wget https://pypi.python.org/packages/fd/82/c8a224a9fed3af696463a7af196a891b7652445e914dc3b85f95d6417d4a/pypiwin32-219-cp35-none-win_amd64.whl#md5=0e1058e35636d2d44b4fd9a4e6abbc27 \
+#    && /usr/bin/pip install pypiwin32-219-cp35-none-win_amd64.whl \
+
 
 # put the src folder inside wine
 RUN mkdir /src/ && ln -s /src /wine/drive_c/src
