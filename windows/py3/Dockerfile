@@ -10,10 +10,12 @@ ARG PYINSTALLER_VERSION=3.2.1
 RUN set -x \
     && dpkg --add-architecture i386 \
     && apt-get update -qy \
-    && apt-get install --no-install-recommends -qfy software-properties-common \
-    && add-apt-repository ppa:wine/wine-builds \
+    && apt-get install --no-install-recommends -qfy software-properties-common wget \
+    && wget -nc https://dl.winehq.org/wine-builds/Release.key
+    && apt-key add Release.key
+    && apt-add-repository https://dl.winehq.org/wine-builds/ubuntu/
     && apt-get update -qy \
-    && apt-get install --no-install-recommends -qfy $WINE_VERSION winetricks wget \
+    && apt-get install -qfy --install-recommends winehq-stable winetricks \
     && apt-get clean
 
 # wine settings
