@@ -10,7 +10,7 @@ ARG PYINSTALLER_VERSION=3.2.1
 RUN set -x \
     && dpkg --add-architecture i386 \
     && apt-get update -qy \
-    && apt-get install --no-install-recommends -qfy software-properties-common wget \
+    && apt-get install --no-install-recommends -qfy software-properties-common wget apt-transport-https \
     && wget -nc https://dl.winehq.org/wine-builds/Release.key \
     && apt-key add Release.key \
     && apt-add-repository https://dl.winehq.org/wine-builds/ubuntu/ \
