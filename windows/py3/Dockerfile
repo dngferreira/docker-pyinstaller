@@ -11,9 +11,9 @@ RUN set -x \
     && dpkg --add-architecture i386 \
     && apt-get update -qy \
     && apt-get install --no-install-recommends -qfy software-properties-common wget \
-    && wget -nc https://dl.winehq.org/wine-builds/Release.key
-    && apt-key add Release.key
-    && apt-add-repository https://dl.winehq.org/wine-builds/ubuntu/
+    && wget -nc https://dl.winehq.org/wine-builds/Release.key \
+    && apt-key add Release.key \
+    && apt-add-repository https://dl.winehq.org/wine-builds/ubuntu/ \
     && apt-get update -qy \
     && apt-get install -qfy --install-recommends winehq-stable winetricks \
     && apt-get clean
