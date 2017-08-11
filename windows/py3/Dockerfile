@@ -50,7 +50,10 @@ RUN set -x \
     && rm -rf /tmp/.wine-*
 
 # install pyinstaller
-RUN /usr/bin/pip install pyinstaller==$PYINSTALLER_VERSION
+RUN set -x \ 
+    && wget https://pypi.python.org/packages/fd/82/c8a224a9fed3af696463a7af196a891b7652445e914dc3b85f95d6417d4a/pypiwin32-219-cp35-none-win_amd64.whl#md5=0e1058e35636d2d44b4fd9a4e6abbc27 \
+    && /usr/bin/pip install pypiwin32-219-cp35-none-win_amd64.whl \
+    && /usr/bin/pip install pyinstaller==$PYINSTALLER_VERSION 
 
 # put the src folder inside wine
 RUN mkdir /src/ && ln -s /src /wine/drive_c/src
